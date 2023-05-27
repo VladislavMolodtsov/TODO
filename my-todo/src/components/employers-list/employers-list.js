@@ -8,9 +8,11 @@ import './employers-list.css';
 const EmployersList = ({data}) => {
 
         const elements = data.map(item => {
+
+                const {id, ...itemProps} = item; // Деструктуризация по остаточному принципу
+                
                 return (
-                        // <EmployersListItem name={name} salary={salary}/>
-                        <EmployersListItem {...item}/> // используем object spread operator
+                        <EmployersListItem key={id} {...itemProps}/>
                 )
         });
 
@@ -19,6 +21,7 @@ const EmployersList = ({data}) => {
                         {elements}
                 </ul>
         )
+
 }
 
 export default EmployersList;
