@@ -6,23 +6,25 @@ import EmployersAddForm from '../employers-add-form/employers-add-form';
 
 import './app.css';
 
-// В консоли записываем npm i - у нас загрузятся все зависимости в package.json и установится папка node_modules
-// Подключаем готовые стили, готовые иконки с cdn.js сервера bootstrap.min.css, font-awesome/all.min.css
-// Cоздаем название папок через "-" и с маленькой буквы
-// Имена компонентам задаем с большой буквы, если название состоит из нескольких слов, то используем CamelCase
-
 function App() {
+
+        const data = [
+                { name: 'John C.', salary: 800, increase: true},
+                { name: 'Alex M.', salary: 3000, increase: false},
+                { name: 'Carl W.', salary: 5000, increase: false},
+        ];
+
         return (
                 <div className='app'>
-                        <AppInfo/> {/* Общая информация о нашем приложении */}
+                        <AppInfo />
 
                         <div className="search-panel">
-                                <SearchPanel/> {/* Строка поиска */}
-                                <AppFilter/> {/* Фильтры */}
+                                <SearchPanel />
+                                <AppFilter />
                         </div>
 
-                        <EmployersList/> {/* Список сотрудников, каждый отдельный сотрудник - это отдельный компонент EmployersListItem */}
-                        <EmployersAddForm/> {/* Компонент с добавлением каждого нового сотрудника */}
+                        <EmployersList data={data} />
+                        <EmployersAddForm />
                 </div>
         );
 }
