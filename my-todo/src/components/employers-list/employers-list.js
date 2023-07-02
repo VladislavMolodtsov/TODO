@@ -5,14 +5,17 @@ import './employers-list.css';
 // 8:45 Взять массив data перебрать каждый элемент массива и из него сформировать каждый новый компонент EmployersListItem
 // метод map пройдет по массиву, сделает что-то и вернет нам новый массив. Данный превратяться в элементы
 
-const EmployersList = ({data}) => {
+const EmployersList = ({data, onDelete}) => {
 
         const elements = data.map(item => {
 
                 const {id, ...itemProps} = item; // Деструктуризация по остаточному принципу
                 
                 return (
-                        <EmployersListItem key={id} {...itemProps}/>
+                        <EmployersListItem
+                                key={id}
+                                {...itemProps}
+                                onDelete={() => onDelete(id)}/>
                 )
         });
 
