@@ -8,68 +8,74 @@ import EmployersAddForm from '../employers-add-form/employers-add-form';
 
 import './app.css';
 
-class App extends Component{
+class App extends Component {
 
-        constructor(props) {
-                super(props);
-                this.state = {
-                        data: [
-                                { name: 'John C.', salary: 800, increase: true, id: 1},
-                                { name: 'Alex M.', salary: 3000, increase: false, id: 2},
-                                { name: 'Carl W.', salary: 5000, increase: false, id: 3},
-                        ]
-                }
-        }
+	constructor(props) {
+		super(props);
+		this.state = {
+			data: [
+				{ name: 'John C.', salary: 800, increase: false, rise: false, id: 1 },
+				{ name: 'Alex M.', salary: 3000, increase: false, rise: false, id: 2 },
+				{ name: 'Carl W.', salary: 5000, increase: false, rise: false, id: 3 }
+			]
+		}
+		this.maxId = 4;
+	}
 
-        /* Задача удалить из массива тот id на которую мы нажали в компоненте employers-list-item.js */
-        /* Чтобы работать динамически с данными в компоненте, данные должны быть внутри state, поэтому мы
-        изменим компонент на классовый */
+	deleteItem = (id) => {
+		this.setState(({ data }) => {
+			return {
+				data: data.filter(item => item.id !== id)
+			}
+		})
+	}
 
-        deleteItem = (id) => {
-                // console.log(id);
+	addItem = (name, salary) => {
+		const newItem = {
+			name,
+			salary,
+			increase: false,
+			id: this.maxId++
+		}
+		this.setState(({ data }) => {
+			const newArr = [...data, newItem];
+			return {
+				data: newArr
+			}
+		});
+	}
 
-                this.setState(({data}) => {
+	onToggleProp = (id, prop) => {
+		this.setState(({ data }) => ({
+			data: data.map(item => {
+				if (item.id === id) {
+					return { ...item, [prop]: !item[prop] }
+				}
+				return item
+			})
+		}))
+	}
 
-                        /* First method */
-                        // const index = data.findIndex(index => index.id === id); // Возвращает индекс элемента, который подходит под условие
+	render() {
+		const { data } = this.state;
 
-                        // const before = data.slice(0, index); // .slice - копирует часть массива и создает новый (от 1-го элемента до index)
-                        // const after = data.slice(index + 1);
+		return (
+			<div className='app'>
+				<AppInfo />
 
-                        // const newArr = [...before, ...after]; // Создаем новый массив
+				<div className="search-panel">
+					<SearchPanel />
+					<AppFilter />
+				</div>
 
-                        // return {
-                        //         data: newArr
-                        // }
-
-                        /* Second method */
-                        return {
-                                data: data.filter(item => item.id !== id)
-                                // Останутся только те элементы массива id которых не совпадает с id который пришел через параметр
-                        }
-
-                })
-        }
-
-        render() {
-                return (
-                        <div className='app'>
-                                <AppInfo />
-        
-                                <div className="search-panel">
-                                        <SearchPanel />
-                                        <AppFilter />
-                                </div>
-        
-                                <EmployersList
-                                        data={this.state.data}
-                                        onDelete={this.deleteItem} />
-                                        {/* Произошла передача данных вниз по иерархии */}
-                                        {/* На выходе у нас выводится id корзины на которую мы кликнули */}
-                                <EmployersAddForm />
-                        </div>
-                );
-        }
+				<EmployersList
+					data={data}
+					onDelete={this.deleteItem}
+					onToggle={this.onToggleProp} />
+				<EmployersAddForm onAdd={this.addItem} />
+			</div>
+		);
+	}
 }
 
 export default App;
